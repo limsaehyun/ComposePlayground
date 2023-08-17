@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Greeting("Android")
-                    Greeting(name = "FIXMEE!!")
+                    Greeting(name = "This is Fixed Test")
                 }
             }
         }
