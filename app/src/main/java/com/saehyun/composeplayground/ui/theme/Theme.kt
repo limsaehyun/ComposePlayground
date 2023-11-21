@@ -1,4 +1,4 @@
-package com.example.playground.ui.theme
+package com.saehyun.composeplayground.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -38,7 +38,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun PlayGroundTheme(
+fun ComposePlaygroundTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
