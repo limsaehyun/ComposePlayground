@@ -14,12 +14,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.actions.createWorkflowDispatch({
+            await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'develop.yml',  # Workflow file name
-              ref: ${{ github.event.issue.pull_request.head.ref }}  # PR's source branch
-            })
+              ref: "${{ github.event.issue.pull_request.head.ref }}"  # PR's source branch
+            });
 
       - name: Deploy Release APK
         if: contains(github.event.comment.body, '/deploy release')
@@ -27,12 +27,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.actions.createWorkflowDispatch({
+            await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'release.yml',  # Workflow file name
-              ref: ${{ github.event.issue.pull_request.head.ref }}  # PR's source branch
-            })
+              ref: "${{ github.event.issue.pull_request.head.ref }}"  # PR's source branch
+            });
 
       - name: Add deploy comment
         if: contains(github.event.comment.body, '/deploy')
@@ -40,14 +40,14 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.rest.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: '🚀 Deployment initiated on branch: ${{ github.event.issue.pull_request.head.ref }}'
-            })
+            });
 
       - name: Test
         if: contains(github.event.comment.body, '/test')
         run: |
-          echo start test
+          echo "Test command executed on branch: ${{ github.event.issue.pull_request.head.ref }}"
