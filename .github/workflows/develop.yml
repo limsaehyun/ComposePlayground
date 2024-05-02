@@ -1,9 +1,10 @@
-name: Build debug APK & upload to firebase app distribution
+name: Build release APK & upload to Firebase App Distribution
 
 on:
   push:
     branches:
       - 'develop'
+  workflow_dispatch:
 
 jobs:
   build-debug-apk-and-upload:
