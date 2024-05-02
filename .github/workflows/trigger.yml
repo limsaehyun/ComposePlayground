@@ -5,26 +5,49 @@ on:
 
 jobs:
   pull_request_comment:
-    if: contains(github.event.comment.html_url, '/pull/')    # check if the comments come from pull request, exclude those from issue.
+    if: contains(github.event.comment.html_url, '/pull/')  # Ensure comments come from PRs
     runs-on: [macos-latest]
     steps:
-      - name: Deploy
-        if: contains(github.event.comment.body, '/deploy')   # check the comment if it contains the keywords
-        run: |
-         echo start deploy
-      - name: Add deploy comment # https://stackoverflow.com/questions/58066966/commenting-a-pull-request-in-a-github-action
-        if: contains(github.event.comment.body, '/deploy')   # check the comment if it contains the keywords
+      - name: Deploy Debug APK
+        if: contains(github.event.comment.body, '/deploy debug')
         uses: actions/github-script@v5
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'develop.yml',  # Workflow file name
+              ref: ${{ github.event.issue.pull_request.head.ref }}  # PR's source branch
+            })
+
+      - name: Deploy Release APK
+        if: contains(github.event.comment.body, '/deploy release')
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'release.yml',  # Workflow file name
+              ref: ${{ github.event.issue.pull_request.head.ref }}  # PR's source branch
+            })
+
+      - name: Add deploy comment
+        if: contains(github.event.comment.body, '/deploy')
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '🚀'
+              body: '🚀 Deployment initiated on branch: ${{ github.event.issue.pull_request.head.ref }}'
             })
+
       - name: Test
-        if: contains(github.event.comment.body, '/test')  # check the comment if it contains the keywords
+        if: contains(github.event.comment.body, '/test')
         run: |
-         echo start test
+          echo start test
