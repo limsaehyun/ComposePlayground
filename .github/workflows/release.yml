@@ -1,0 +1,17 @@
+name: Build release APK & upload to Firebase App Distribution
+
+on:
+  push:
+    branches:
+      - 'develop'
+  workflow_dispatch:
+
+jobs:
+  build-release-apk-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Echo Hello World
+        run: echo "Hello World"
