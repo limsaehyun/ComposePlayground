@@ -18,7 +18,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'develop.yml',  # Workflow file name
-              ref: "${{ github.event.issue.pull_request.head.ref }}"  # PR's source branch
+              ref: "${{ github.ref_name }}"  # PR's source branch
             });
 
       - name: Deploy Release APK
