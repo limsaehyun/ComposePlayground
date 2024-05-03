@@ -18,7 +18,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'develop.yml',
-              ref: ${{ github.head_ref || github.ref_name }} 
+              ref: '${{github.event.pull_request.base.ref}}'
             });
 
       - name: Deploy Release APK
@@ -31,7 +31,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'release.yml',  # Workflow file name
-              ref: ${{ github.head_ref || github.ref_name }}
+              ref: '${{ github.head_ref || github.ref_name }}'
             });
 
       - name: Add deploy comment
